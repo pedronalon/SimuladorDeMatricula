@@ -3,18 +3,19 @@ package aprendendo.sistemadesimulacaodeplanejamentoacademico;
 import java.util.List;
 
 public class ValidadorLogicoOR implements ValidadorPreRequisito{
+    private final List<ValidadorPreRequisito> preRequisitos;
 
-    public ValidadorLogicoOR(){}
+    public ValidadorLogicoOR(List<ValidadorPreRequisito> validadores) {
+        preRequisitos = validadores;
+    }
 
     @Override
     public boolean validar(Aluno aluno, Disciplina disciplina){
-        boolean validou = false;
-        List<ValidadorPreRequisito> preRequisitos = disciplina.getValidadoresPreRequisito();
-        for(ValidadorPreRequisito preRequisito : preRequisitos ){
-            validou = preRequisito.validar(aluno, disciplina);
-            if(validou)
-                break;
+
+        for(ValidadorPreRequisito preRequisito : preRequisitos){
+            if(preRequisito.validar(aluno, disciplina));
+                return true;
         }
-        return validou;
+        return false;
     }
 }

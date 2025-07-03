@@ -8,20 +8,19 @@ public abstract class Disciplina {
     private String nomeDaDisciplina;
     private String codigo;
     private int cargaHorariaSemanal;
-    private int ordemPrioridade;
     private double notaMinima;
     private final List<Disciplina> coRequisitos;
     private final List<ValidadorPreRequisito> preRequisitos;
 
-    public Disciplina(String nome, String codigo, double notaMinima, int cargaHorariaSemanal, int ordemPrioridade) {
+    public Disciplina(String nome, String codigo, int cargaHorariaSemanal) {
         this.nomeDaDisciplina = nome;
         this.codigo = codigo;
         this.cargaHorariaSemanal = cargaHorariaSemanal;
-        this.ordemPrioridade = ordemPrioridade;
-        this.notaMinima = notaMinima;
         this.coRequisitos = new ArrayList<>();
         this.preRequisitos = new ArrayList<>();
+
     }
+
 
     /// adiciona co-requisito
     public void adicionarCoRequisito(Disciplina disciplina) {

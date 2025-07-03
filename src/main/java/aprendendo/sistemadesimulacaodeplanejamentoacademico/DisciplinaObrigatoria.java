@@ -2,9 +2,7 @@ package aprendendo.sistemadesimulacaodeplanejamentoacademico;
 
 public class DisciplinaObrigatoria extends Disciplina {
 
-    public DisciplinaObrigatoria(String nome, String codigo,double notaMinima, int cargaHorariaSemanal) {
-        super(nome, codigo, notaMinima, cargaHorariaSemanal, 1);
+    public DisciplinaObrigatoria(String nome, String codigo, int cargaHorariaSemanal) {
+        super(nome, codigo, cargaHorariaSemanal);
     }
-
-
 }

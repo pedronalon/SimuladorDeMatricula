@@ -9,5 +9,5 @@ package aprendendo.sistemadesimulacaodeplanejamentoacademico;
  * @author Heitor
  */
 public class SistemaDeSimulacaoDePlanejamentoAcademico {
-
+    /// main
 }
