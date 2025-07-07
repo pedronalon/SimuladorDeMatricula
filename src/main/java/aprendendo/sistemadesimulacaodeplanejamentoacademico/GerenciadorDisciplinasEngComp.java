@@ -234,6 +234,7 @@ public class GerenciadorDisciplinasEngComp {
         Disciplina mecanicaDosFluidosPratica = new DisciplinaEletiva("MECÂNICA DOS FLUDOS PRÁTICA", "ESA503", 2);
         Disciplina mineracaoDeDados = new DisciplinaEletiva("MINERAÇÃO DE DADOS", "DCC127", 4);
         Disciplina imunologiaComputacional = new DisciplinaEletiva("IMUNOLOGA COMPUTACIONAL", "DCC211", 4);
+        Disciplina processamentoDeImagens = new DisciplinaEletiva("PROCESSAMENTO DE IMAGENS" , "DCC066" , 4) ;
 
 
         matriz.adicionarDisciplina(inteligenciaArtificial);
@@ -254,9 +255,26 @@ public class GerenciadorDisciplinasEngComp {
         matriz.adicionarDisciplina(imunologiaComputacional);
         imunologiaComputacional.adicionarPreRequisito(new ValidadorSimples(calculoNumerico.getCodigo()));
 
-
+        matriz.adicionarDisciplina(processamentoDeImagens);
+        processamentoDeImagens.adicionarMultiplosPreRequisitos(algoritmosI,algebraLinear);
 
         //optativas
+
+        Disciplina inglesInstrumental = new DisciplinaOptativa("INGLÊS INSTRUMENTAL", "EADDCC011", 4) ;
+        Disciplina analiseI = new DisciplinaOptativa("ANÁLISE I", "MAT147" , 4) ;
+        Disciplina introAsvariaveisComplexas = new DisciplinaOptativa("INTRODUÇÃO ÀS VARIÁVEIS COMPLEXAS" ,"MAT031",4);
+        Disciplina fundamentosDaMatElementar = new DisciplinaOptativa("FUNDAMENTOS DA MATEMÁTICA ELEMENTAR","MAT133",4) ;
+
+
+        matriz.adicionarDisciplina(inglesInstrumental);
+
+        matriz.adicionarDisciplina(fundamentosDaMatElementar);
+
+        matriz.adicionarDisciplina(introAsvariaveisComplexas);
+        introAsvariaveisComplexas.adicionarPreRequisito(new ValidadorSimples(equacoesDiferenciaisI.getCodigo()));
+
+        matriz.adicionarDisciplina(analiseI);
+        analiseI.adicionarMultiplosPreRequisitos(fundamentosDaMatElementar,calculoII);
 
 
     }
