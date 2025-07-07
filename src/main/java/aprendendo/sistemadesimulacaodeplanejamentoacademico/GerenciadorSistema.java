@@ -11,7 +11,7 @@ public class GerenciadorSistema {
         sistema.adicionarMatrizCurricular(ENGENHARIA_COMPUTACIONAL);
 
         for(Disciplina disciplinas : ENGENHARIA_COMPUTACIONAL.getCatalogoDisciplinas()){
-            sistema.adicionar
+          //  sistema.adicionar
         }
         return sistema;
     }

@@ -1,0 +1,261 @@
+// =================================================================
+// ARQUIVO 1: SetupSistema.java (NOVO)
+// OBJETIVO: Unificar e corrigir a lógica de carregamento dos dados.
+// AÇÃO: Substitua suas duas classes "Gerenciador..." por esta.
+// =================================================================
+package aprendendo.sistemadesimulacaodeplanejamentoacademico;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class SetupSistema {
+
+    /**
+     * Monta todo o cenário acadêmico (cursos, disciplinas, turmas)
+     * e retorna um objeto SistemaAcademico pronto para uso.
+     */
+    public static SistemaAcademico carregarSistema() {
+        SistemaAcademico sistema = new SistemaAcademico();
+
+        // 1. Usa o Gerenciador de Disciplinas para criar a matriz curricular
+        GerenciadorDisciplinasEngComp gerenciadorEngComp = new GerenciadorDisciplinasEngComp();
+        MatrizCurricular engComp = gerenciadorEngComp.criarCurso();
+
+        // 2. Adiciona a matriz curricular pronta ao sistema
+        sistema.adicionarMatrizCurricular(engComp);
+
+        // 3. Adiciona as disciplinas da matriz ao catálogo geral do sistema
+        for (Disciplina d : engComp.getDisciplinas().values()) {
+            sistema.adicionarDisciplinaAoCatalogo(d);
+        }
+
+        // 4. Adiciona as turmas disponíveis ao sistema
+        popularTurmas(sistema, engComp);
+
+        // Você poderia criar outros gerenciadores para outros cursos e adicioná-los aqui
+
+        return sistema;
+    }
+
+    /**
+     * Cria as turmas e as adiciona ao catálogo do sistema.
+     */
+    private static void popularTurmas(SistemaAcademico sistema, MatrizCurricular matriz) {
+        // Pega as disciplinas da matriz para criar as turmas
+        Disciplina calculoI = matriz.getDisciplina("MAT154");
+        Disciplina calculoII = matriz.getDisciplina("MAT155"); // Código corrigido
+        Disciplina poo = matriz.getDisciplina("DCC025");
+
+        if (calculoI != null) sistema.adicionarTurma(new Turma("EC_CALC1_T1", calculoI, 30, "SEG-08-10"));
+        if (calculoII != null) sistema.adicionarTurma(new Turma("EC_CALC2_T1", calculoII, 30, "TER-10-12"));
+        if (poo != null) sistema.adicionarTurma(new Turma("EC_POO_T1", poo, 25, "SEG-08-10")); // Conflito de horário com Cálculo I
+
+        // Adicione outras turmas aqui...
+    }
+}
+
+// =================================================================
+// ARQUIVO 2: SistemaAcademico.java (REVISADO)
+// OBJETIVO: Corrigir construtores e implementar o loop principal.
+// AÇÃO: Substitua o conteúdo da sua classe por este.
+// =================================================================
+package aprendendo.sistemadesimulacaodeplanejamentoacademico;
+
+import aprendendo.sistemadesimulacaodeplanejamentoacademico.TratamentoDeExcecoes.*;
+import java.util.*;
+
+public class SistemaAcademico {
+
+    private Map<String, Aluno> alunos;
+    private Map<String, MatrizCurricular> matrizes;
+    private Map<String, Turma> turmas;
+    private Map<String, Integer> gerenciadorDeMatriculas;
+    private Map<String, Disciplina> catalogoGeralDisciplinas; // Catálogo geral
+
+    public SistemaAcademico() {
+        this.alunos = new HashMap<>();
+        this.matrizes = new HashMap<>();
+        this.turmas = new HashMap<>();
+        this.gerenciadorDeMatriculas = new HashMap<>();
+        this.catalogoGeralDisciplinas = new HashMap<>();
+    }
+
+    // --- Métodos de Gerenciamento ---
+    public void adicionarMatrizCurricular(MatrizCurricular matriz) {
+        this.matrizes.put(matriz.getCodigoDoCurso(), matriz);
+    }
+
+    public void adicionarTurma(Turma turma) {
+        this.turmas.put(turma.getIdDaTurma(), turma);
+    }
+
+    public void adicionarDisciplinaAoCatalogo(Disciplina disciplina) {
+        this.catalogoGeralDisciplinas.put(disciplina.getCodigo(), disciplina);
+    }
+
+    public MatrizCurricular getMatrizPorCodigo(String codigoCurso) {
+        return this.matrizes.get(codigoCurso);
+    }
+
+    public Turma getTurma(String idTurma) {
+        return this.turmas.get(idTurma);
+    }
+
+    private String geraMatricula(int anoDeIngresso, String codigoDoCurso) {
+        String chave = anoDeIngresso + "-" + codigoDoCurso;
+        int ordem = gerenciadorDeMatriculas.getOrDefault(chave, 1);
+        gerenciadorDeMatriculas.put(chave, ordem + 1);
+        return String.format("%d%s%03d", anoDeIngresso, codigoDoCurso, ordem);
+    }
+
+    public Aluno registraAluno(String nome, int anoDeIngresso, String codigoDoCurso, int cargaHorariaMaxima) throws Exception {
+        MatrizCurricular curso = this.matrizes.get(codigoDoCurso);
+        if (curso == null) {
+            throw new Exception("Curso com código " + codigoDoCurso + " não existe no sistema.");
+        }
+        String matriculaGerada = geraMatricula(anoDeIngresso, codigoDoCurso);
+        Aluno novoAluno = new Aluno(nome, matriculaGerada, cargaHorariaMaxima, curso);
+        this.alunos.put(matriculaGerada, novoAluno);
+        return novoAluno;
+    }
+
+    // --- O LOOP PRINCIPAL DA APLICAÇÃO ---
+    public RelatorioMatricula processarMatricula(Aluno aluno) {
+        List<Turma> turmasMatriculadas = new ArrayList<>();
+        Map<Turma, String> turmasRejeitadas = new HashMap<>();
+        int cargaHorariaAtual = 0;
+
+        for (Turma turmaDesejada : aluno.getPlanejamentoFuturo()) {
+            Disciplina disciplinaDesejada = turmaDesejada.getDisciplina();
+            try {
+                // 1. VALIDAÇÃO DE VAGAS
+                if (turmaDesejada.estaCheia()) {
+                    throw new TurmaCheiaException("Turma sem vagas.");
+                }
+
+                // 2. VALIDAÇÃO DE CARGA HORÁRIA
+                if (cargaHorariaAtual + disciplinaDesejada.getCargaHorariaSemanal() > aluno.getCargaHorariaMaxima()) {
+                    throw new CargaHorariaExcedidaException("Excede a carga horária máxima do aluno.");
+                }
+
+                // 3. VALIDAÇÃO DE CONFLITO DE HORÁRIO
+                Turma turmaEmConflito = null;
+                for (Turma jaMatriculada : turmasMatriculadas) {
+                    if (jaMatriculada.getHorarioDeAula().equals(turmaDesejada.getHorarioDeAula())) {
+                        turmaEmConflito = jaMatriculada;
+                        break;
+                    }
+                }
+
+                if (turmaEmConflito != null) {
+                    Disciplina disciplinaExistente = turmaEmConflito.getDisciplina();
+                    if (disciplinaDesejada.getOrdemPrioridade() < disciplinaExistente.getOrdemPrioridade()) {
+                        turmasMatriculadas.remove(turmaEmConflito);
+                        turmasRejeitadas.put(turmaEmConflito, "Substituída por " + disciplinaDesejada.getNome() + " (maior prioridade).");
+                        cargaHorariaAtual -= disciplinaExistente.getCargaHorariaSemanal();
+                    } else {
+                        throw new ConflitoDeHorarioException("Conflito de horário com " + disciplinaExistente.getNome());
+                    }
+                }
+
+                // 4. VALIDAÇÃO DE PRÉ-REQUISITOS
+                for (ValidadorPreRequisito validador : disciplinaDesejada.getValidadoresPreRequisito()) {
+                    if (!validador.validar(aluno, disciplinaDesejada)) {
+                        throw new PreRequisitoNaoCumpridoException("Não cumpre os pré-requisitos necessários para " + disciplinaDesejada.getNome());
+                    }
+                }
+
+                // SE PASSOU EM TUDO: MATRICULA APROVADA
+                turmasMatriculadas.add(turmaDesejada);
+                cargaHorariaAtual += disciplinaDesejada.getCargaHorariaSemanal();
+
+            } catch (MatriculaException e) {
+                turmasRejeitadas.put(turmaDesejada, e.getMessage());
+            }
+        }
+
+        // 5. VALIDAÇÃO FINAL DE CO-REQUISITOS
+        List<Turma> turmasParaRemover = new ArrayList<>();
+        for (Turma matriculada : turmasMatriculadas) {
+            for (Disciplina coReq : matriculada.getDisciplina().getCoRequisitos()) {
+                boolean coRequisitoEncontrado = false;
+                for (Turma outraMatriculada : turmasMatriculadas) {
+                    if (outraMatriculada.getDisciplina().getCodigo().equals(coReq.getCodigo())) {
+                        coRequisitoEncontrado = true;
+                        break;
+                    }
+                }
+                if (!coRequisitoEncontrado) {
+                    turmasParaRemover.add(matriculada);
+                    turmasRejeitadas.put(matriculada, "Co-requisito " + coReq.getNome() + " não foi matriculado junto.");
+                    break;
+                }
+            }
+        }
+        turmasMatriculadas.removeAll(turmasParaRemover);
+
+        return new RelatorioMatricula(aluno, turmasMatriculadas, turmasRejeitadas);
+    }
+}
+
+// =================================================================
+// ARQUIVO 3: Main.java (NOVO)
+// OBJETIVO: Criar um ponto de entrada para rodar a simulação manual.
+// AÇÃO: Crie esta nova classe no seu projeto (substituindo o SistemaDeSimulacaoDePlanejamentoAcademico.java).
+// =================================================================
+package aprendendo.sistemadesimulacaodeplanejamentoacademico;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class Main {
+
+    public static void main(String[] args) {
+        try {
+            // --- 1. SETUP ---
+            System.out.println("Carregando sistema acadêmico...");
+            SistemaAcademico sistema = SetupSistema.carregarSistema();
+            System.out.println("Sistema carregado com sucesso.");
+
+            // --- 2. REGISTRO DO ALUNO ---
+            System.out.println("\nRegistrando aluno...");
+            Aluno meuAluno = sistema.registraAluno("Heitor", 2024, "65", 24);
+            System.out.println("Aluno registrado: " + meuAluno.getNome() + " | Matrícula: " + meuAluno.getMatricula());
+
+            // --- 3. ADICIONAR HISTÓRICO ---
+            System.out.println("\nAdicionando histórico ao aluno...");
+            MatrizCurricular cursoAluno = meuAluno.getCurso();
+            meuAluno.adicionarDisciplina(cursoAluno.getDisciplina("MAT154"), 75.0); // Aprovado em Cálculo I
+            meuAluno.adicionarDisciplina(cursoAluno.getDisciplina("DCC199"), 50.0); // Reprovado em Algoritmos I
+            System.out.println("Histórico adicionado.");
+
+            // --- 4. FASE DE PLANEJAMENTO DO SEMESTRE ---
+            System.out.println("\nAluno planejando o próximo semestre...");
+            meuAluno.adicionarTurmaAoPlanejamento(sistema.getTurma("EC_CALC2_T1")); // Requer Cálculo I (OK)
+            meuAluno.adicionarTurmaAoPlanejamento(sistema.getTurma("EC_POO_T1"));   // Conflito com Cálculo I e requer Algoritmos I (Reprovado)
+            System.out.println("Planejamento concluído.");
+
+            // --- 5. PROCESSAMENTO DA MATRÍCULA ---
+            System.out.println("\nProcessando matrícula...");
+            RelatorioMatricula relatorio = sistema.processarMatricula(meuAluno);
+
+            // --- 6. ANÁLISE DO RELATÓRIO ---
+            System.out.println("\nProcessamento finalizado. Gerando relatório...");
+            relatorio.imprimir();
+
+            // --- 7. CONSOLIDAÇÃO DO SEMESTRE ---
+            System.out.println("\nConsolidando semestre...");
+            Map<String, Double> notasFinais = new HashMap<>();
+            for(Turma t : relatorio.getTurmasMatriculadas()){
+                notasFinais.put(t.getDisciplina().getCodigo(), 80.0); // Nota 80 para todas as aprovadas
+            }
+            meuAluno.consolidarSemestre(relatorio.getTurmasMatriculadas(), notasFinais);
+            meuAluno.limparPlanejamentoFuturo();
+            System.out.println("Semestre consolidado. Aluno pronto para o próximo período.");
+
+        } catch (Exception e) {
+            System.err.println("Ocorreu um erro fatal no sistema: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+}
