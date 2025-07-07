@@ -13,7 +13,7 @@ public class ValidadorLogicoOR implements ValidadorPreRequisito{
     public boolean validar(Aluno aluno, Disciplina disciplina){
 
         for(ValidadorPreRequisito preRequisito : preRequisitos){
-            if(preRequisito.validar(aluno, disciplina));
+            if(preRequisito.validar(aluno, disciplina))
                 return true;
         }
         return false;

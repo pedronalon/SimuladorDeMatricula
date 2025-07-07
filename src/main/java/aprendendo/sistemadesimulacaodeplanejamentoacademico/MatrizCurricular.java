@@ -1,5 +1,6 @@
 package aprendendo.sistemadesimulacaodeplanejamentoacademico;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,12 +11,15 @@ public class MatrizCurricular {
 
     private Map<String, Disciplina> disciplinasComCodigo;
 
-    public MatrizCurricular(int codigoDoCurso, String nomeDoCurso) {
+    public MatrizCurricular(String nomeDoCurso,int codigoDoCurso ) {
         this.codigoDoCurso = codigoDoCurso;
         this.nomeDoCurso = nomeDoCurso;
         this.disciplinasComCodigo = new HashMap<>();
     }
 
+    public Collection<Disciplina> getCatalogoDisciplinas() {
+        return this.disciplinasComCodigo.values();
+    }
 
     public void adicionarDisciplina(Disciplina disciplina) {
         this.disciplinasComCodigo.put(disciplina.getCodigo(), disciplina);
