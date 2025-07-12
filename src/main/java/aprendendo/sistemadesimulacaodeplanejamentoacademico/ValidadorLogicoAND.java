@@ -14,7 +14,7 @@ public class ValidadorLogicoAND implements ValidadorPreRequisito{
 
         for(ValidadorPreRequisito preRequisito : preRequisitos)
             if(!preRequisito.validar(aluno, disciplina))
-            return false;
+                return false;
 
         return true;
     }
