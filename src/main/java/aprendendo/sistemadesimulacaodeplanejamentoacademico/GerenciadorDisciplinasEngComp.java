@@ -16,7 +16,7 @@ public class GerenciadorDisciplinasEngComp {
     private void disciplinasObrigatoriasEngComp(MatrizCurricular matriz) {
         // 1º Período
         Disciplina calculoI = new DisciplinaObrigatoria("CÁLCULO I", "MAT154", 4);
-        Disciplina geometriaAnalitica = new DisciplinaObrigatoria("GEOMETRIA ANALÍTICA E SISTEMAS LINEARES", "MAT156", 4);
+        Disciplina geometriaAnalitica = new DisciplinaObrigatoria("GEOMETRIA ANALÍTICA E SISTEMAS LINEARES", "MAT155", 4);
         Disciplina labIntroducaoCienciasFisica = new DisciplinaObrigatoria("LABORATÓRIO DE INTRODUÇÃO ÀS CIÊNCIAS FÍSICAS", "FIS122", 2);
         Disciplina quimicaFundamental = new DisciplinaObrigatoria("QUÍMICA FUNDAMENTAL", "QUI125", 4);
         Disciplina labQuimica = new DisciplinaObrigatoria("LABORATÓRIO DE QUÍMICA", "QUI126", 2);
