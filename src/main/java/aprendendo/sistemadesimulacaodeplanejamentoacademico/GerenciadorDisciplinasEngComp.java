@@ -7,16 +7,16 @@ public class GerenciadorDisciplinasEngComp {
 
 
     public MatrizCurricular criarCurso(){
-        MatrizCurricular matrizEngenhariaComputacinoal = new MatrizCurricular("Engenharia Computacional",65);
+        MatrizCurricular matrizEngenhariaComputacinoal = new MatrizCurricular("Engenharia Computacional","65");
         this.disciplinasObrigatoriasEngComp(matrizEngenhariaComputacinoal);
 
         return  matrizEngenhariaComputacinoal;
     }
 
-    private void disciplinasObrigatoriasEngComp(MatrizCurricular matriz){
-        // 1º Período
+    private void disciplinasObrigatoriasEngComp(MatrizCurricular matriz) {
+        /// 1º Período
         Disciplina calculoI = new DisciplinaObrigatoria("CÁLCULO I", "MAT154", 4);
-        Disciplina geometriaAnalitica = new DisciplinaObrigatoria("GEOMETRIA ANALÍTICA E SISTEMAS LINEARES", "MAT156", 4);
+        Disciplina geometriaAnalitica = new DisciplinaObrigatoria("GEOMETRIA ANALÍTICA E SISTEMAS LINEARES", "MAT155", 4);
         Disciplina labIntroducaoCienciasFisica = new DisciplinaObrigatoria("LABORATÓRIO DE INTRODUÇÃO ÀS CIÊNCIAS FÍSICAS", "FIS122", 2);
         Disciplina quimicaFundamental = new DisciplinaObrigatoria("QUÍMICA FUNDAMENTAL", "QUI125", 4);
         Disciplina labQuimica = new DisciplinaObrigatoria("LABORATÓRIO DE QUÍMICA", "QUI126", 2);
@@ -36,14 +36,14 @@ public class GerenciadorDisciplinasEngComp {
         matriz.adicionarDisciplina(algoritmosI);
         matriz.adicionarDisciplina(algoritmosIPratica);
 
-// 2º Período
+        /// 2º Período
         Disciplina calculoII = new DisciplinaObrigatoria("CÁLCULO II", "MAT156", 4);
         Disciplina introEstatistica = new DisciplinaObrigatoria("INTRODUÇÃO À ESTATÍSTICA", "EST028", 4);
         Disciplina algoritmosII = new DisciplinaObrigatoria("ALGORITMOS II", "DCCXX1", 4);
         Disciplina algoritmosIIPratica = new DisciplinaObrigatoria("ALGORITMOS II - PRÁTICA", "DCC5X1", 2);
         Disciplina fisicaI = new DisciplinaObrigatoria("FÍSICA I", "FI8073", 4);
         Disciplina labFisicaI = new DisciplinaObrigatoria("LABORATÓRIO DE FÍSICA I", "F15077", 2);
-        Disciplina labTransformacoesQuimicas = new DisciplinaObrigatoria("TRANSFORMAÇÕES QUÍMICAS", "QUI168", 2);
+        Disciplina labTransformacoesQuimicas = new DisciplinaObrigatoria("LABORATÓRIO DE TRANSFORMAÇÕES QUÍMICAS", "QUI168", 2);
         Disciplina introducaoEngComp = new DisciplinaObrigatoria("INTRODUÇÃO À ENGENHARIA COMPUTACIONAL", "MAC011", 2);
 
         matriz.adicionarDisciplina(calculoII);
@@ -69,7 +69,7 @@ public class GerenciadorDisciplinasEngComp {
         labTransformacoesQuimicas.adicionarPreRequisito(new ValidadorSimples(labQuimica.getCodigo()));
         matriz.adicionarDisciplina(introducaoEngComp);
 
-        // 3º Período
+        /// 3º Período
         Disciplina calcProbabilidadeI = new DisciplinaObrigatoria("CÁLCULO DE PROBABILIDADE I", "EST029", 4);
         Disciplina orientacaoObjetos = new DisciplinaObrigatoria("ORIENTAÇÃO A OBJETOS", "DCC025", 4);
         Disciplina fisicaII = new DisciplinaObrigatoria("FÍSICA II", "F18074", 4);
@@ -95,7 +95,7 @@ public class GerenciadorDisciplinasEngComp {
         matriz.adicionarDisciplina(estruturaDadosI);
         estruturaDadosI.adicionarPreRequisito(new ValidadorSimples(algoritmosII.getCodigo()));
 
-        // 4º Período
+        /// 4º Período
         Disciplina estruturaDadosII = new DisciplinaObrigatoria("ESTRUTURA DE DADOS II", "DCC012", 4);
         Disciplina calculoNumerico = new DisciplinaObrigatoria("CÁLCULO NUMÉRICO", "DCC008", 4);
         Disciplina equacoesDiferenciaisI = new DisciplinaObrigatoria("EQUAÇÕES DIFERENCIAIS I", "MAT029", 4);
@@ -116,7 +116,7 @@ public class GerenciadorDisciplinasEngComp {
         algebraLinear.adicionarPreRequisito(new ValidadorSimples(geometriaAnalitica.getCodigo()));
 
         matriz.adicionarDisciplina(resistenciaDosMateriais);
-        resistenciaDosMateriais.adicionarMultiplosPreRequisitos(fisicaI,  calculoIII);
+        resistenciaDosMateriais.adicionarMultiplosPreRequisitos(fisicaI, calculoIII);
 
         matriz.adicionarDisciplina(fisicaIII);
         fisicaIII.adicionarMultiplosPreRequisitos(fisicaII, calculoIII);
@@ -224,13 +224,60 @@ public class GerenciadorDisciplinasEngComp {
         Disciplina tccII = new DisciplinaObrigatoria("TRABALHO FINAL DE CURSO II", "MACXX2", 2);
         matriz.adicionarDisciplina(tccII);
         tccII.adicionarPreRequisito(new ValidadorSimples(tccI.getCodigo()));
+
+        // eletivas
+
+
+        Disciplina inteligenciaArtificial = new DisciplinaEletiva("INTELIGÊNCIA ARTIFICIAL", "DCC014", 4);
+        Disciplina redesNeuraisArtificiais = new DisciplinaEletiva("REDES NEURAIS ARTIFICIAIS", "DCC068", 4);
+        Disciplina mecanicaDosFluidos = new DisciplinaEletiva("MECANICA DOS FLUDOS", "ESA003", 4);
+        Disciplina mecanicaDosFluidosPratica = new DisciplinaEletiva("MECÂNICA DOS FLUDOS PRÁTICA", "ESA503", 2);
+        Disciplina mineracaoDeDados = new DisciplinaEletiva("MINERAÇÃO DE DADOS", "DCC127", 4);
+        Disciplina imunologiaComputacional = new DisciplinaEletiva("IMUNOLOGA COMPUTACIONAL", "DCC211", 4);
+        Disciplina processamentoDeImagens = new DisciplinaEletiva("PROCESSAMENTO DE IMAGENS" , "DCC066" , 4) ;
+
+
+        matriz.adicionarDisciplina(inteligenciaArtificial);
+        inteligenciaArtificial.adicionarPreRequisito(new ValidadorSimples(teoriaGrafos.getCodigo()));
+
+        matriz.adicionarDisciplina(redesNeuraisArtificiais);
+        redesNeuraisArtificiais.adicionarPreRequisito(new ValidadorSimples(teoriaGrafos.getCodigo()));
+
+        matriz.adicionarDisciplina(mecanicaDosFluidos);
+        matriz.adicionarDisciplina(mecanicaDosFluidosPratica);
+        mecanicaDosFluidos.adicionarPreRequisito(new ValidadorSimples(fenomenosTransporte.getCodigo()));
+        mecanicaDosFluidos.adicionarCoRequisito(mecanicaDosFluidosPratica);
+        mecanicaDosFluidosPratica.adicionarCoRequisito(mecanicaDosFluidos);
+
+        matriz.adicionarDisciplina(mineracaoDeDados);
+
+
+        matriz.adicionarDisciplina(imunologiaComputacional);
+        imunologiaComputacional.adicionarPreRequisito(new ValidadorSimples(calculoNumerico.getCodigo()));
+
+        matriz.adicionarDisciplina(processamentoDeImagens);
+        processamentoDeImagens.adicionarMultiplosPreRequisitos(algoritmosI,algebraLinear);
+
+        //optativas
+
+        Disciplina inglesInstrumental = new DisciplinaOptativa("INGLÊS INSTRUMENTAL", "EADDCC011", 4) ;
+        Disciplina analiseI = new DisciplinaOptativa("ANÁLISE I", "MAT147" , 4) ;
+        Disciplina introAsvariaveisComplexas = new DisciplinaOptativa("INTRODUÇÃO ÀS VARIÁVEIS COMPLEXAS" ,"MAT031",4);
+        Disciplina fundamentosDaMatElementar = new DisciplinaOptativa("FUNDAMENTOS DA MATEMÁTICA ELEMENTAR","MAT133",4) ;
+
+
+        matriz.adicionarDisciplina(inglesInstrumental);
+
+        matriz.adicionarDisciplina(fundamentosDaMatElementar);
+
+        matriz.adicionarDisciplina(introAsvariaveisComplexas);
+        introAsvariaveisComplexas.adicionarPreRequisito(new ValidadorSimples(equacoesDiferenciaisI.getCodigo()));
+
+        matriz.adicionarDisciplina(analiseI);
+        analiseI.adicionarMultiplosPreRequisitos(fundamentosDaMatElementar,calculoII);
+
+
     }
 
-
-
-
-    private void disciplinasEletivasEngComp(MatrizCurricular matriz){
-
-    }
 }
 

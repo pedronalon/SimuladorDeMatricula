@@ -16,10 +16,6 @@ public class RelatorioMatricula {
         this.turmasRejeitadasComMotivo = turmasRejeitadasComMotivo;
     }
 
-    // Getters para que possamos ler o resultado
-    public Aluno getAluno() {
-        return aluno;
-    }
 
     public List<Turma> getTurmasMatriculadas() {
         return turmasMatriculadas;

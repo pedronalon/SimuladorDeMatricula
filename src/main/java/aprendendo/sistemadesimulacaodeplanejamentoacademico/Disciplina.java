@@ -9,7 +9,6 @@ public abstract class Disciplina {
     private String codigo;
     private int ordemPrioridade;
     private int cargaHorariaSemanal;
-    private double notaMinima;
     private final List<Disciplina> coRequisitos;
     private final List<ValidadorPreRequisito> preRequisitos;
 
@@ -45,7 +44,7 @@ public abstract class Disciplina {
     public String getNome() {return nomeDaDisciplina;}
     public String getCodigo() {return codigo;}
     public int getCargaHorariaSemanal() {return cargaHorariaSemanal;}
-    public double getNotaMinima(){return notaMinima;}
+    public int getOrdemPrioridade() { return ordemPrioridade; }
 
     /// retorna lista imutável de pre-requisitos
     public List<ValidadorPreRequisito> getValidadoresPreRequisito() {return Collections.unmodifiableList(preRequisitos);}
