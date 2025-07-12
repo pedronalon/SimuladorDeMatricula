@@ -2,7 +2,6 @@ package aprendendo.sistemadesimulacaodeplanejamentoacademico;
 
 import java.util.*;
 
-
 public class Aluno {
     private String nome;
     private String matricula;
@@ -25,10 +24,6 @@ public class Aluno {
         this.disciplinasCursadasComNota.put(disciplina.getCodigo(), notaFinal);
     }
 
-    public MatrizCurricular getCurso() {
-        return curso;
-    }
-
     public void adicionarTurmaAoPlanejamento(Turma turma){
         this.planejamentoFuturo.add(turma);
     }
@@ -37,7 +32,8 @@ public class Aluno {
         return new ArrayList<>(this.planejamentoFuturo);
     }
 
-    public void limparPlanejamento(){
+    // NOME DO MÉTODO CORRIGIDO PARA COMPATIBILIDADE
+    public void limparPlanejamentoFuturo(){
         this.planejamentoFuturo.clear();
     }
 
@@ -45,9 +41,7 @@ public class Aluno {
         for (Turma turma : turmasMatriculadas) {
             String codigoDisciplina = turma.getDisciplina().getCodigo();
             Double nota = notasFinais.get(codigoDisciplina);
-
             if (nota != null) {
-                // Usa o metodo que você já tinha para adicionar ao histórico
                 this.adicionarDisciplina(turma.getDisciplina(), nota);
             }
         }
@@ -56,34 +50,26 @@ public class Aluno {
     public boolean cumpriuDisciplina(String idDaDisciplina){
         final double notaMinima = 60;
         Double notaAtual = disciplinasCursadasComNota.get(idDaDisciplina);
-        if(notaAtual != null)
-            return notaAtual >= notaMinima;
-
-        else return false;
+        return notaAtual != null && notaAtual >= notaMinima;
     }
 
-    public void setMatricula(String matricula) {this.matricula = matricula;}
-
     public int getTotalCreditosCursados() {
-       int totalCreditos = 0;
+        int totalCreditos = 0;
         for(String codigoDaDisciplina : disciplinasCursadasComNota.keySet()) {
             Disciplina disciplina = curso.getDisciplina(codigoDaDisciplina);
             if(disciplina != null){
                 totalCreditos += disciplina.getCargaHorariaSemanal();
-                /// carga horaria semanal = qtde creditos da disciplina
             }
         }
         return totalCreditos;
     }
 
-    /// 60 h / semestre
-    /// = 4h por semana
-    /// = 4 creditos.
+    // --- GETTERS CORRIGIDOS E ADICIONADOS ---
+    public String getNome() { return nome; }
+    public int getCargaHorariaMaxima() { return cargaHorariaMaxima; }
+    public MatrizCurricular getCurso() { return curso; }
+    public Map<String, Double> getDisciplinasCursadasComNota() { return disciplinasCursadasComNota; }
 
-    public String getNome() {return nome;}
-    public int getCargaHorariaMaxima() {return cargaHorariaMaxima;}
-    public MatrizCurricular getcurso() {return curso;}
-    public Map<String, Double> getDisciplinasCursadasComNota() {return disciplinasCursadasComNota;}
-
-    public String getAnoDeIngresso() {return anoDeIngresso;}
+    // MÉTODO ADICIONADO QUE ESTAVA FALTANDO
+    public String getMatricula() { return matricula; }
 }
