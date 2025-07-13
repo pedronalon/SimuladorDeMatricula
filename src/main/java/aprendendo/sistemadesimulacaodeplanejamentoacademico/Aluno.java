@@ -6,7 +6,6 @@ import java.util.*;
 public class Aluno {
     private String nome;
     private String matricula;
-    private String anoDeIngresso;
     private int cargaHorariaMaxima;
     private MatrizCurricular curso;
     private Map<String, Double> disciplinasCursadasComNota;
