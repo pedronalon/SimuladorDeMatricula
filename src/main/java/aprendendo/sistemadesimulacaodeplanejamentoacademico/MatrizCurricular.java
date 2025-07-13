@@ -6,12 +6,12 @@ import java.util.Map;
 
 public class MatrizCurricular {
 
-    private final int codigoDoCurso;
+    private final String codigoDoCurso;
     private final String nomeDoCurso;
 
     private Map<String, Disciplina> disciplinasComCodigo;
 
-    public MatrizCurricular(String nomeDoCurso,int codigoDoCurso ) {
+    public MatrizCurricular(String nomeDoCurso, String codigoDoCurso ) {
         this.codigoDoCurso = codigoDoCurso;
         this.nomeDoCurso = nomeDoCurso;
         this.disciplinasComCodigo = new HashMap<>();
@@ -29,6 +29,6 @@ public class MatrizCurricular {
         return this.disciplinasComCodigo.get(codigoDaDisciplina);
     }
 
-    public int getCodigoDoCurso() {return this.codigoDoCurso;}
+    public String getCodigoDoCurso() {return this.codigoDoCurso;}
     public String getNomeDoCurso() {return nomeDoCurso;}
 }

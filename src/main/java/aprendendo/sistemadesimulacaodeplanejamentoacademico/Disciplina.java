@@ -46,7 +46,6 @@ public abstract class Disciplina {
     public String getCodigo() {return codigo;}
     public int getCargaHorariaSemanal() {return cargaHorariaSemanal;}
     public double getNotaMinima(){return notaMinima;}
-    public int getOrdemPrioridade() { return ordemPrioridade; }
 
     /// retorna lista imutável de pre-requisitos
     public List<ValidadorPreRequisito> getValidadoresPreRequisito() {return Collections.unmodifiableList(preRequisitos);}
